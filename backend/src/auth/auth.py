@@ -64,7 +64,7 @@ def get_token_auth_header():
     return token
 
 '''
-@TODO implement check_permissions(permission, payload) method
+@implement check_permissions(permission, payload) method
     @INPUTS
         permission: string permission (i.e. 'post:drink')
         payload: decoded jwt payload
@@ -178,8 +178,13 @@ def requires_auth(permission=''):
                 payload = verify_decode_jwt(token)
             except:
                 print(sys.exc_info())
-                abort(401)
-            check_permissions(permission,payload)
+                raise AuthError({
+                    'code': 'invalid_token',
+                    'description': 'Access denied due to invalid token'
+                },401)
+
+            check_permissions(permission, payload)
             return f(payload, *args, **kwargs)
+
         return wrapper
     return requires_auth_decorator

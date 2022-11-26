@@ -46,7 +46,7 @@ def drinks():
         }),200
 
     except Exception:
-        sys.exc_info()
+        print(sys.exc_info())
         abort(404)
 
 
@@ -70,7 +70,7 @@ def drinks_detail(jwt):
         }),200
 
     except Exception:
-        sys.exc_info()
+        print(sys.exc_info())
         abort(404)
 
 
@@ -97,14 +97,16 @@ def post_drink(jwt):
             recipe = drink_data.get('recipe')
             )
         drink.insert()
-        print(drink)
+
+        print(drink.long())
+
         return jsonify({
         "success": True,
         "drinks": [drink.long()]
         }),200
 
     except Exception:
-        sys.exc_info()
+        print(sys.exc_info())
         abort(422)
 
 
@@ -129,11 +131,17 @@ def update_drink(jwt,id):
     try:        
         new_data = request.get_json()
         
-        if not('title' in new_data and 'recipe' in new_data):
+        if not('title' in new_data or 'recipe' in new_data):
             abort(422)
         
-        drink_to_update.title  = new_data.get('title')
-        drink_to_update.recipe = new_data.get('recipe')
+        title = new_data.get('title')
+        recipe = new_data.get('recipe')
+        
+        if title:
+            drink_to_update.title  = new_data.get('title')
+        if recipe:
+            drink_to_update.recipe = new_data.get('recipe')
+            
         drink_to_update.update()
         
         return jsonify({
@@ -142,7 +150,7 @@ def update_drink(jwt,id):
         }),200
 
     except Exception:
-        sys.exc_info()
+        print(sys.exc_info())
         abort(422)
 
 '''
@@ -168,7 +176,7 @@ def delete_drink(jwt,id):
         }),200
 
     except Exception:
-        sys.exc_info()
+        print(sys.exc_info())
         abort(422)
 
 
@@ -220,7 +228,7 @@ def handle_auth_error(err):
         "success": False,
         "error": err.status_code,
         'message': err.error
-    }), 401
+    }), err.status_code
 
 
 
