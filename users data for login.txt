@@ -1,0 +1,8 @@
+Role :    Manager
+email: 	  manager@me.com
+password: Manager123
+
+-------------------------------
+Role :    Barista
+email: 	  barista@me.com
+password: Barista123
